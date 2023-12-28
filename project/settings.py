@@ -11,21 +11,37 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 
 import os
+from pathlib import Path
 
-# Build paths inside the project like this: os.path.join(BASE_DIR, ...)
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+import dj_database_url
+import environ
+
+# Build paths inside the project like this: BASE_DIR / 'subdir'.
+BASE_DIR = Path(__file__).resolve().parent.parent
 
 
 # Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
+# See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
+
+env = environ.Env(
+    SECRET_KEY=(str, ""),
+    DEBUG=(bool, True),
+    ALLOWED_HOSTS=(list, []),
+    CSRF_TRUSTED_ORIGINS=(list, []),
+    CORS_ALLOWED_ORIGINS=(list, []),
+    DATABASE_URL=(str, ""),
+)
+environ.Env.read_env(Path(BASE_DIR).joinpath(".env"))
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '^y2mq((vrgjz@6!7b5%-c^8fbz1wp3agoe7^7y-5ev1#7-!j9&'
+SECRET_KEY = env("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = env("DEBUG")
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = env("ALLOWED_HOSTS")
+if DEBUG:
+    ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
