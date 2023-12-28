@@ -1,0 +1,12 @@
+Pipfile
+Pipfile.lock
+db.sqlite3
+.env
+.env.db
+*.pyc
+__pycache__
+venv
+.vscode/*
+.DS_Store
+/media
+/static
