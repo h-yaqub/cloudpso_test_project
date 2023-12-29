@@ -4,7 +4,12 @@ The platform is a web app for the company´s own internal users.
 
 Internal users enter using credentials and have different levels of hierarchy to get access to the data.
 
-Also, public information for marketing, about us and services information about the company is displayed for any user (like a normal webpage).
+This app works for following roles that you can add in `Role` model:
+
+  - Admin (Superuser)
+  - Manager (Manager module)
+  - Admin Op (Inventory module)
+  - HR (Employees module)
 
 ## Technology Stack
 
