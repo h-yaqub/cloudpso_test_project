@@ -51,15 +51,24 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     @property
     def is_admin_op(self):
-        return self.roles.filter(name="Admin Op").exists
+        if self.is_superuser:
+            return True
+
+        return self.roles.filter(role__name="Admin Op").exists
 
     @property
     def is_hr_manager(self):
-        return self.roles.filter(name="HR").exists
+        if self.is_superuser:
+            return True
+
+        return self.roles.filter(role__name="HR").exists
 
     @property
     def is_accounts_manager(self):
-        return self.roles.filter(name="Accounts").exists
+        if self.is_superuser:
+            return True
+
+        return self.roles.filter(role__name="Accounts").exists
 
 
 class AppPermission(models.Model):

@@ -1,0 +1,53 @@
+{% extends 'auth_base.html' %}
+
+{% load static %}
+{% load widget_tweaks %}
+
+
+{% block title %}Login{% endblock %}
+
+{% block content %}
+<div class="container">
+  <div class="middle-box">
+    <div class="text-center">
+      <h3>Login</h3>
+    </div>
+    <div class="row justify-content-center">
+      <div class="col-12">
+        <form method="post">
+          {% csrf_token %}
+
+          {% if form.non_field_errors %}
+          <div class="alert alert-danger" role="alert">
+          {{ form.non_field_errors }}
+          </div>
+          {% endif %}
+
+          {% for field in form %}
+          <div class="form-group">
+            <label class="control-label">{{ field.label_tag }}</label>
+            {% render_field field class+="form-control" %}
+            {% if field.help_text %}
+              <small style="color: grey">{{ field.help_text }}</small>
+            {% endif %}
+            {% for error in field.errors %}
+              <p style="color: #c64450">{{ error }}</p>
+            {% endfor %}
+          </div>
+          {% endfor %}
+          <div>
+            <div>
+              <a href="{% url 'password_reset' %}">Forgot password?</a>
+            </div>
+          </div>
+          <div>
+            Not a member? <a href="{% url 'core:register' %}">Signup</a>
+          </div>
+          <button type="submit" class="btn btn-primary float-right">Login</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

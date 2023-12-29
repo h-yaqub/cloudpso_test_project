@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% load static %}
+{% load widget_tweaks %}
+
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content_title %}
+
+{% if user.is_superuser %}
+Superuser with all permissions.
+{% else %}
+You have
+{% for user_role in user.roles.all %}
+{{user_role.role.name}}
+{% empty %}
+no
+{% endfor %}
+permissions.
+{% endif %}
+{% endblock %}
