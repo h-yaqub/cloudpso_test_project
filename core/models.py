@@ -1,5 +1,5 @@
 from django.contrib.auth.base_user import BaseUserManager
-from django.contrib.auth.models import AbstractBaseUser
+from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from django.db import models
 
 
@@ -33,7 +33,7 @@ class CustomUserManager(BaseUserManager):
         return user
 
 
-class User(AbstractBaseUser):
+class User(AbstractBaseUser, PermissionsMixin):
     full_name = models.CharField("Full Name", max_length=30)
     email = models.EmailField("Email Address", unique=True, db_index=True)
     username = models.CharField("Username", max_length=100)
@@ -49,8 +49,20 @@ class User(AbstractBaseUser):
     def __str__(self):
         return self.email
 
+    @property
+    def is_admin_op(self):
+        return self.roles.filter(name="Admin Op").exists
 
-class Permission(models.Model):
+    @property
+    def is_hr_manager(self):
+        return self.roles.filter(name="HR").exists
+
+    @property
+    def is_accounts_manager(self):
+        return self.roles.filter(name="Accounts").exists
+
+
+class AppPermission(models.Model):
     name = models.CharField(max_length=255, unique=True)
     description = models.TextField(null=True, blank=True)
 
@@ -65,7 +77,7 @@ class Role(models.Model):
     name = models.CharField(max_length=255, unique=True)
     description = models.TextField()
 
-    permissions = models.ManyToManyField(Permission)
+    permissions = models.ManyToManyField(AppPermission)
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
