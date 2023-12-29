@@ -1,0 +1,57 @@
+name: Build Integration
+
+on:
+  push:
+    branches:
+      - "main"
+  pull_request:
+  workflow_call:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      SECRET_KEY: fake
+      DEBUG: True
+      DATABASE_URL: "postgres://postgres:secret@localhost/postgres"
+
+    services:
+    # Label used to access the service container
+      postgres:
+        # Docker Hub image
+        image: postgres
+        # Provide the password for postgres
+        env:
+          POSTGRES_PASSWORD: secret
+        # Set health checks to wait until postgres has started
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          # Maps tcp port 5432 on service container to the host
+          - 5432:5432
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup Python 3.9
+        uses: actions/setup-python@v4.0.0
+        with:
+          python-version: "3.9"
+      - name: Install dependencies
+        run: |
+          pip install -r requirements-dev.txt
+      - name: Run Tests
+        run: |
+          ./manage.py test
+
+  pre-commit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+        with:
+          python-version: "3.9"
+          cache: pip
+      - uses: pre-commit/action@v2.0.3
