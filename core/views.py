@@ -1,12 +1,11 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
 from django.views import View
-from django.views.generic import TemplateView, ListView, DetailView
-from django.views.generic.edit import UpdateView, CreateView, DeleteView
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.views.generic import DetailView, ListView, TemplateView
+from django.views.generic.edit import CreateView, DeleteView, UpdateView
 
-from . import models
-from . import forms
+from . import forms, models
 
 
 class RegisterView(View):
@@ -47,8 +46,8 @@ class UpdateUserView(LoginRequiredMixin, UpdateView):
 
 
 class NoteListView(LoginRequiredMixin, ListView):
-    template_name = 'notes_list.html'
-    context_object_name = 'notes'
+    template_name = "notes_list.html"
+    context_object_name = "notes"
 
     def get_queryset(self):
         _user = self.request.user
@@ -73,6 +72,7 @@ class EditNoteView(LoginRequiredMixin, UpdateView):
     template_name = "note_form.html"
     success_url = reverse_lazy("core:notes_list")
 
+
 class DeleteNoteView(LoginRequiredMixin, DeleteView):
     model = models.Note
     template_name = "note_confirm_delete.html"
@@ -81,5 +81,5 @@ class DeleteNoteView(LoginRequiredMixin, DeleteView):
 
 class DetailNoteView(DetailView):
     model = models.Note
-    template_name = 'note_detail.html'
-    context_object_name = 'note'
+    template_name = "note_detail.html"
+    context_object_name = "note"

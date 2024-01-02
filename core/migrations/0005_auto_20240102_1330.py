@@ -6,21 +6,21 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('core', '0004_note'),
+        ("core", "0004_note"),
     ]
 
     operations = [
         migrations.RemoveField(
-            model_name='user',
-            name='groups',
+            model_name="user",
+            name="groups",
         ),
         migrations.RemoveField(
-            model_name='user',
-            name='user_permissions',
+            model_name="user",
+            name="user_permissions",
         ),
         migrations.AlterField(
-            model_name='user',
-            name='is_superuser',
-            field=models.BooleanField(default=False, verbose_name='SU Member'),
+            model_name="user",
+            name="is_superuser",
+            field=models.BooleanField(default=False, verbose_name="SU Member"),
         ),
     ]

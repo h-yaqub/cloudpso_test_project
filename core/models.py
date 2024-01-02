@@ -1,4 +1,3 @@
-from collections.abc import Iterable
 from django.contrib.auth.base_user import BaseUserManager
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from django.db import models
@@ -90,12 +89,13 @@ class Note(models.Model):
     title = models.CharField(max_length=50)
     description = models.TextField()
 
-    created_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name='created_notes')
-    assigned_to = models.ManyToManyField(User, related_name='assigned_notes')
+    created_by = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name="created_notes"
+    )
+    assigned_to = models.ManyToManyField(User, related_name="assigned_notes")
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return self.title
-

@@ -30,6 +30,7 @@ class UserCreationForm(forms.ModelForm):
 
         return user
 
+
 class UserUpdateForm(forms.ModelForm):
     class Meta:
         model = models.User
@@ -41,7 +42,7 @@ class NoteCreateForm(forms.ModelForm):
         model = models.Note
         fields = "__all__"
         widgets = {
-            'created_by': forms.HiddenInput(),
+            "created_by": forms.HiddenInput(),
         }
 
 
