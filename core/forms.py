@@ -48,4 +48,4 @@ class NoteCreateForm(forms.ModelForm):
 class NoteEditForm(forms.ModelForm):
     class Meta:
         model = models.Note
-        fields = ("description",)
+        fields = ("description", "assigned_to")

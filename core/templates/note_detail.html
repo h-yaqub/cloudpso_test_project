@@ -1,0 +1,36 @@
+{% extends 'site_base.html' %}
+
+{% load static %}
+{% load widget_tweaks %}
+
+
+{% block title %}Note Details{% endblock %}
+
+{% block content_title %}
+Note Details
+{% if 'can_create_note' in allowed_permissions %}
+<a href="{% url 'core:notes_create' %}" class="btn btn-info float-right">Create</a>
+{% endif %}
+{% endblock %}
+
+{% block content %}
+<div class="">
+    <h6>Title: &nbsp;{{note.title}}</h6>
+    <h6>Description: &nbsp;{{note.description}}</h6>
+    <h6>Created By: &nbsp;{{note.created_by}}</h6>
+    <h6>Assigned To: &nbsp;
+        {% for assignee in note.assigned_to.all %}
+        {{assignee.full_name}} ({{assignee.email}}),&nbsp;
+        {% endfor %}
+    </h6>
+</div>
+<div class="float-right">
+{% if 'can_edit_notes' in allowed_permissions %}
+    <a href="{% url 'core:notes_edit' note.id %}" title="Edit" class="btn btn-info"><i class="fas fa-edit"></i></a>
+{% endif %}
+{% if 'can_delete_notes' in allowed_permissions %}
+    <a href="{% url 'core:notes_delete' note.id %}" title="Delete" class="btn btn-danger"><i class="fas fa-trash-alt"></i></a>
+{% endif %}
+</div>
+
+{% endblock %}

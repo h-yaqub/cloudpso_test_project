@@ -1,7 +1,7 @@
 from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
 from django.views import View
-from django.views.generic import TemplateView, ListView
+from django.views.generic import TemplateView, ListView, DetailView
 from django.views.generic.edit import UpdateView, CreateView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin
 
@@ -73,7 +73,13 @@ class EditNoteView(LoginRequiredMixin, UpdateView):
     template_name = "note_form.html"
     success_url = reverse_lazy("core:notes_list")
 
-class EditNoteView(LoginRequiredMixin, DeleteView):
+class DeleteNoteView(LoginRequiredMixin, DeleteView):
     model = models.Note
     template_name = "note_confirm_delete.html"
     success_url = reverse_lazy("core:notes_list")
+
+
+class DetailNoteView(DetailView):
+    model = models.Note
+    template_name = 'note_detail.html'
+    context_object_name = 'note'

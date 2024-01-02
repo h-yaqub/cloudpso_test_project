@@ -20,18 +20,18 @@ Notes
         <th scope="col">Title</th>
         <th scope="col">Description</th>
         <th scope="col">Created By</th>
-        <th scope="col">Handle</th>
+        <th scope="col">Actions</th>
       </tr>
     </thead>
     <tbody>
     {% for note in notes %}
     <tr class="h6">
-        <td>{{note.title}}</td>
+        <td><a href="{% url 'core:notes_detail' note.id %}">{{note.title}}</a></td>
         <td>{{note.description}}</td>
         <td>{{note.created_by}}</td>
         <td>
         {% if 'can_edit_notes' in allowed_permissions %}
-            <a href="{% url 'core:notes_edit' note.id %}" title="Edit"><i class="fas fa-edit"></i></a>
+            <a href="{% url 'core:notes_edit' note.id %}" title="Edit" class="mr-3"><i class="fas fa-edit"></i></a>
         {% endif %}
         {% if 'can_delete_notes' in allowed_permissions %}
             <a href="{% url 'core:notes_delete' note.id %}" title="Delete"><i class="fas fa-trash-alt"></i></a>
