@@ -1,6 +1,8 @@
 from django.shortcuts import redirect, render
 from django.views import View
 from django.views.generic import TemplateView
+from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
 
 from . import forms
 
@@ -33,3 +35,10 @@ class RegisterView(View):
 
 class HomeView(TemplateView):
     template_name = "home.html"
+
+    @method_decorator(login_required)
+    def dispatch(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return redirect("account_login")
+
+        return super().dispatch(request, *args, **kwargs)

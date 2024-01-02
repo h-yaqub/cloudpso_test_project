@@ -17,13 +17,13 @@
         <form method="post">
           {% csrf_token %}
 
-          {% if register_form.non_field_errors %}
+          {% if form.non_field_errors %}
           <div class="alert alert-danger" role="alert">
           {{ register_form.non_field_errors }}
           </div>
           {% endif %}
 
-          {% for field in register_form %}
+          {% for field in form %}
           <div class="form-group">
             <label class="control-label">{{ field.label_tag }}</label>
             {% render_field field class+="form-control" %}
@@ -36,9 +36,9 @@
           </div>
           {% endfor %}
           <div>
-            Alrady have an account? <a href="{% url 'login' %}">Login</a>
+            Alrady have an account? <a href="{% url 'account_login' %}">Login</a>
           </div>
-          <button type="submit" class="btn btn-primary float-right">Register</button>
+          <butin type="submit" class="btn btn-primary float-right">Register</button>
         </form>
       </div>
     </div>
