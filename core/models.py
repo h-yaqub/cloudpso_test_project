@@ -1,3 +1,4 @@
+from collections.abc import Iterable
 from django.contrib.auth.base_user import BaseUserManager
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from django.db import models
@@ -49,27 +50,6 @@ class User(AbstractBaseUser, PermissionsMixin):
     def __str__(self):
         return self.email
 
-    @property
-    def is_admin_op(self):
-        if self.is_superuser:
-            return True
-
-        return self.roles.filter(role__name="Admin Op").exists
-
-    @property
-    def is_hr_manager(self):
-        if self.is_superuser:
-            return True
-
-        return self.roles.filter(role__name="HR").exists
-
-    @property
-    def is_accounts_manager(self):
-        if self.is_superuser:
-            return True
-
-        return self.roles.filter(role__name="Accounts").exists
-
 
 class AppPermission(models.Model):
     name = models.CharField(max_length=255, unique=True)
@@ -104,3 +84,18 @@ class UserRole(models.Model):
 
     def __str__(self):
         return f"{self.user.username} - {self.role.name}"
+
+
+class Note(models.Model):
+    title = models.CharField(max_length=50)
+    description = models.TextField()
+
+    created_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name='created_notes')
+    assigned_to = models.ManyToManyField(User, related_name='assigned_notes')
+
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.title
+

@@ -29,3 +29,23 @@ class UserCreationForm(forms.ModelForm):
             user.save()
 
         return user
+
+class UserUpdateForm(forms.ModelForm):
+    class Meta:
+        model = models.User
+        fields = ("full_name",)
+
+
+class NoteCreateForm(forms.ModelForm):
+    class Meta:
+        model = models.Note
+        fields = "__all__"
+        widgets = {
+            'created_by': forms.HiddenInput(),
+        }
+
+
+class NoteEditForm(forms.ModelForm):
+    class Meta:
+        model = models.Note
+        fields = ("description",)

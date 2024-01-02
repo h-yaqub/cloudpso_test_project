@@ -50,3 +50,9 @@ class RoleAdmin(admin.ModelAdmin):
 class UserRoleAdmin(admin.ModelAdmin):
     list_display = ("user", "role", "created_at", "updated_at")
     search_fields = ("user__username", "user__email")
+
+
+@admin.register(models.Note)
+class NoteAdmin(admin.ModelAdmin):
+    list_display = ("title", "created_by", "created_at", "updated_at")
+    search_fields = ("title", "created_by__username", "created_by__email")

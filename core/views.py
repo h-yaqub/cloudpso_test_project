@@ -1,9 +1,11 @@
 from django.shortcuts import redirect, render
+from django.urls import reverse_lazy
 from django.views import View
-from django.views.generic import TemplateView
-from django.contrib.auth.decorators import login_required
-from django.utils.decorators import method_decorator
+from django.views.generic import TemplateView, ListView
+from django.views.generic.edit import UpdateView, CreateView, DeleteView
+from django.contrib.auth.mixins import LoginRequiredMixin
 
+from . import models
 from . import forms
 
 
@@ -33,12 +35,45 @@ class RegisterView(View):
         return render(request, self.template_name, context)
 
 
-class HomeView(TemplateView):
+class HomeView(LoginRequiredMixin, TemplateView):
     template_name = "home.html"
 
-    @method_decorator(login_required)
-    def dispatch(self, request, *args, **kwargs):
-        if not request.user.is_authenticated:
-            return redirect("account_login")
 
-        return super().dispatch(request, *args, **kwargs)
+class UpdateUserView(LoginRequiredMixin, UpdateView):
+    model = models.User
+    form_class = forms.UserUpdateForm
+    template_name = "user_update.html"
+    success_url = reverse_lazy("core:home")
+
+
+class NoteListView(LoginRequiredMixin, ListView):
+    template_name = 'notes_list.html'
+    context_object_name = 'notes'
+
+    def get_queryset(self):
+        _user = self.request.user
+        if _user.is_superuser:
+            return models.Note.objects.all()
+
+        queryset = self.request.user.assigned_notes.all()
+
+        return queryset
+
+
+class CreateNoteView(LoginRequiredMixin, CreateView):
+    model = models.Note
+    form_class = forms.NoteCreateForm
+    template_name = "note_form.html"
+    success_url = reverse_lazy("core:notes_list")
+
+
+class EditNoteView(LoginRequiredMixin, UpdateView):
+    model = models.Note
+    form_class = forms.NoteEditForm
+    template_name = "note_form.html"
+    success_url = reverse_lazy("core:notes_list")
+
+class EditNoteView(LoginRequiredMixin, DeleteView):
+    model = models.Note
+    template_name = "note_confirm_delete.html"
+    success_url = reverse_lazy("core:notes_list")
